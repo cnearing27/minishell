@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   split_tokens.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dozella <dozella@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/31 13:51:33 by dozella           #+#    #+#             */
+/*   Updated: 2022/10/31 14:01:03 by dozella          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 void	copy_dollar(char *line, int *i, int *j, char *copy)
@@ -67,16 +79,26 @@ void	pull_redir(t_help *help, t_list *token)
 {
 	if (token->next == NULL)
 		exit (100);
-	if (((t_token *)token->value)->key == REDIR_IN)
-		help->redir_in = ft_strdup(((t_token *)token->next->value)->value);
-	else if (((t_token *)token->value)->key == REDIR_OUT)
-		help->redir_out = ft_strdup(((t_token *)token->next->value)->value);
-	else if (((t_token *)token->value)->key == REDIR_APPEND)
-		help->heredok = ft_strdup(((t_token *)token->next->value)->value);
 	if (help->fd != 0)
 		close(help->fd);
-	help->fd = open(((t_token *)token->next->value)->value, \
-		O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (((t_token *)token->value)->key == REDIR_APPEND)
+	{
+		help->heredok = ft_strdup(((t_token *)token->next->value)->value);
+		help->fd = open(((t_token *)token->next->value)->value, \
+			O_WRONLY | O_CREAT | O_APPEND, 0644);
+	}
+	else if (((t_token *)token->value)->key == REDIR_IN)
+	{
+		help->redir_in = ft_strdup(((t_token *)token->next->value)->value);
+		help->fd = open(((t_token *)token->next->value)->value, \
+			O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	}
+	else if (((t_token *)token->value)->key == REDIR_OUT)
+	{
+		help->redir_out = ft_strdup(((t_token *)token->next->value)->value);
+		help->fd = open(((t_token *)token->next->value)->value, \
+			O_RDONLY, 0644);
+	}
 }
 
 void	split_tokens(t_info *info)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   preparser.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cnearing <cnearing@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/31 13:51:30 by dozella           #+#    #+#             */
+/*   Updated: 2022/10/31 15:52:42 by cnearing         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 void	del_sep(t_info *info)
@@ -12,6 +24,7 @@ void	del_sep(t_info *info)
 		if (((t_token *)tmp->value)->key == SEP)
 		{
 			help->next = help->next->next;
+			free(((t_token *)tmp->value)->value);
 			free(tmp);
 			tmp = help;
 		}

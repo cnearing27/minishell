@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   run_pipe.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cnearing <cnearing@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/30 22:44:20 by cnearing          #+#    #+#             */
+/*   Updated: 2022/10/30 22:44:21 by cnearing         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 void	wait_pid(pid_t *pid, int n)
@@ -17,7 +29,7 @@ void	wait_pid(pid_t *pid, int n)
 	}
 }
 
-void	baby_process(t_comand *data)
+void	child_process(t_comand *data)
 {
 	int	i;
 
@@ -34,15 +46,15 @@ void	baby_process(t_comand *data)
 	dup2(data->fd_in_out[ERR_FD], STDERR_FILENO);
 	if (ft_builtins(data))
 	{
-		chech_comand(data);
+		check_command(data);
 		data->args = add_cmd(data);
-		if (execve(data->args[0], data->args, g_info.envp) == -1)
-			return ; // ;
+		if (execve(data->args[0], data->args, g_info.env) == -1)
+			return ;
 	}
 	exit(0);
 }
 
-int	more_cmd(int number_cmd)
+int	few_cmds(int number_cmd)
 {
 	t_comand	*temp;
 	pid_t		*pid;
@@ -57,7 +69,7 @@ int	more_cmd(int number_cmd)
 	{
 		pid[i] = fork();
 		if (!pid[i])
-			baby_process(temp);
+			child_process(temp);
 		if (temp->fd_in_out[WRITE_FD] != STDOUT_FILENO)
 			close(temp->fd_in_out[WRITE_FD]);
 		if (temp->fd_in_out[READ_FD] != STDIN_FILENO)

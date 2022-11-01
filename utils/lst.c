@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lst.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cnearing <cnearing@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/31 13:51:03 by dozella           #+#    #+#             */
+/*   Updated: 2022/10/31 19:16:09 by cnearing         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 t_list	*ft_create_token(char *value, int key)
@@ -12,11 +24,11 @@ t_list	*ft_create_token(char *value, int key)
 	return (ft_lstnew(token));
 }
 
-t_list	*ft_create_envp(char *key, char *value)
+t_list	*ft_create_env(char *key, char *value)
 {
-	t_envp	*env;
+	t_env	*env;
 
-	env = malloc (sizeof(t_envp));
+	env = malloc (sizeof(t_env));
 	if (!env)
 		return (NULL);
 	env->key = key;
@@ -54,8 +66,10 @@ void	ft_pushback(t_list **lst, t_list *elem)
 	if (!*lst)
 	{
 		*lst = elem;
+		(*lst)->next = NULL;
 		return ;
 	}
 	tmp = ft_lstlast(*lst);
 	tmp->next = elem;
+	(tmp->next)->next = NULL;
 }

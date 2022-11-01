@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dozella <dozella@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/31 13:51:27 by dozella           #+#    #+#             */
+/*   Updated: 2022/10/31 13:51:39 by dozella          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 void	ft_lstadd_back_c(t_comand **lst, t_comand *new)
@@ -29,7 +41,7 @@ char	**ft_mstrdup(char **s)
 	i = 0;
 	while (s[i])
 		i++;
-	new = malloc(sizeof(char *) * (i + 2));
+	new = malloc(sizeof(char *) * (i + 1));
 	i = 0;
 	while (s[i])
 	{

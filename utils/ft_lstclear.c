@@ -1,30 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_srtlcpy.c                                       :+:      :+:    :+:   */
+/*   ft_lstclear.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dozella <dozella@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cnearing <cnearing@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/31 13:50:25 by dozella           #+#    #+#             */
-/*   Updated: 2022/10/31 13:50:34 by dozella          ###   ########.fr       */
+/*   Created: 2022/04/20 01:49:40 by dozella           #+#    #+#             */
+/*   Updated: 2022/10/31 19:13:35 by cnearing         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+void	ft_lstclear(t_list **lst)
 {
-	size_t	index;
+	t_list	*temp;
 
-	if (!size)
-		return (ft_strlen(src));
-	index = 0;
-	while (src[index] && index < size - 1)
+	if (!*lst || !lst)
+		return ;
+	while (*lst)
 	{
-		dst[index] = src[index];
-		index++;
+		temp = *lst;
+		*lst = (*lst)->next;
+		free(temp);
 	}
-	if (size)
-		dst[index] = '\0';
-	return (ft_strlen(src));
 }

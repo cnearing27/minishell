@@ -1,19 +1,20 @@
 NAME 			= minishell
 
 HEADER			= includes/minishell.h
+PATH_READLINE	= /usr/local/include/readline/
 
 OBJ_DIR 		= ./objects
 SRC				= $(shell ls ./builtins/*.c) $(shell ls ./signal/*.c) $(shell ls ./executor/*.c) $(shell ls ./src/*.c) $(shell ls ./utils/*.c) $(shell ls ./lexer/*.c) $(shell ls ./parser/*.c) main.c
 OBJ				= $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
-CFLAGS 			= #-Wall -Wextra -Werror
+CFLAGS 			= -Wall -Wextra -Werror
 RM	 			= rm -rf
-CC				= gcc #-g3 -fsanitize=address
+CC				= cc
 
 all		: $(NAME)
 
-$(NAME)	: $(OBJ)
-			$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -lreadline
+$(NAME)	: $(OBJ) $(HEADER)
+			$(CC) -o $@ $(OBJ) -lreadline -L $(PATH_READLINE) -I $(HEADER)
 
 $(OBJ_DIR)/%.o:	%.c	$(HEADER)
 				@mkdir -p $(dir $@)

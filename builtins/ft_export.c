@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_export.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dozella <dozella@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/30 22:34:09 by cnearing          #+#    #+#             */
+/*   Updated: 2022/10/31 13:57:56 by dozella          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 static void	print_export(void)
@@ -7,7 +19,7 @@ static void	print_export(void)
 	int		i;
 
 	n = 0;
-	while (g_info.envp[n] && g_info.envp)
+	while (g_info.env[n] && g_info.env)
 		n++;
 	export = malloc(sizeof(char *) * n);
 	if (!export)
@@ -15,10 +27,10 @@ static void	print_export(void)
 	i = 0;
 	while (i < n)
 	{
-		export[i] = g_info.envp[i];
+		export[i] = g_info.env[i];
 		i++;
 	}
-	alph_sorting(export, n);
+	sort_abc(export, n);
 	i = 0;
 	while (i < n)
 		env_in_export(export[i++]);
@@ -39,29 +51,29 @@ void	add_export(char *new)
 	int		i;
 
 	init_p(&size_name, &i, &name, new);
-	while (g_info.envp[i] && name)
+	while (g_info.env[i] && name)
 	{
-		if (!ft_strncmp(g_info.envp[i], name, size_name) \
-		&& (g_info.envp[i][size_name] == '=' \
-			|| g_info.envp[i][size_name] == '\0'))
+		if (!ft_strncmp(g_info.env[i], name, size_name) \
+		&& (g_info.env[i][size_name] == '=' \
+			|| g_info.env[i][size_name] == '\0'))
 		{
 			if (new[index_equals(new) + 1] && ft_strchr(new, '='))
 			{
-				free(g_info.envp[i]);
-				g_info.envp[i] = ft_strdup(new);
+				free(g_info.env[i]);
+				g_info.env[i] = ft_strdup(new);
 			}
 			free(name);
 			return ;
 		}
 		i++;
 	}
-	g_info.envp = ft_realloc(g_info.envp, i * sizeof(char *), \
+	g_info.env = ft_realloc(g_info.env, i * sizeof(char *), \
 							(i + 2) * sizeof(char *));
-	g_info.envp[i] = ft_strdup(new);
+	g_info.env[i] = ft_strdup(new);
 	free(name);
 }
 
-static int	valid_args(char	*str)
+static int	check_args(char	*str)
 {
 	int	i;
 
@@ -88,8 +100,12 @@ void	ft_export(char **args)
 	g_info.status = 0;
 	while (args[i])
 	{
-		if (valid_args(args[i]))
+		if (check_args(args[i]))
+		{
 			add_export(args[i]);
+			ft_lstclear(&g_info.env_list);
+			env_list(&g_info);
+		}
 		else
 		{
 			ft_putstr_fd("export: '", 2);

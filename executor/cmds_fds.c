@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmds_fds.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cnearing <cnearing@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/30 22:38:25 by cnearing          #+#    #+#             */
+/*   Updated: 2022/10/30 22:38:54 by cnearing         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 void	define_fds(t_comand *cmd)
@@ -26,7 +38,7 @@ void	define_fds(t_comand *cmd)
 void	cmds_fds(t_comand *cmd, int size)
 {
 	t_comand	*temp;
-	t_comand	*pred;
+	t_comand	*last;
 	int			i;
 
 	i = 0;
@@ -36,9 +48,9 @@ void	cmds_fds(t_comand *cmd, int size)
 		if ((size != 1) && (i != size - 1))
 			define_fds(temp);
 		if (i == size - 1 && (size != 1))
-			temp->fd_close[0] = pred->fd_in_out[WRITE_FD];
+			temp->fd_close[0] = last->fd_in_out[WRITE_FD];
 		i++;
-		pred = temp;
+		last = temp;
 		temp = temp->next;
 	}
 }

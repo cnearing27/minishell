@@ -1,19 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_unset.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cnearing <cnearing@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/30 22:38:13 by cnearing          #+#    #+#             */
+/*   Updated: 2022/10/30 22:38:14 by cnearing         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-static void	up_mass(int k)
+static void	move_up_args(int k)
 {
-	while (g_info.envp[k + 1])
+	while (g_info.env[k + 1])
 	{
-		g_info.envp[k] = g_info.envp[k + 1];
+		g_info.env[k] = g_info.env[k + 1];
 		k++;
-		if (!g_info.envp[k + 1])
-			g_info.envp[k] = NULL;
+		if (!g_info.env[k + 1])
+			g_info.env[k] = NULL;
 	}
-	g_info.envp = ft_realloc(g_info.envp, (k + 1) * sizeof(char *), \
+	g_info.env = ft_realloc(g_info.env, (k + 1) * sizeof(char *), \
 							(k + 2) * sizeof(char *));
 }
 
-static int	valid_args(char	*str)
+static int	check_args(char	*str)
 {
 	int	i;
 
@@ -32,13 +44,13 @@ static int	valid_args(char	*str)
 	return (1);
 }
 
-void	dell(char	*arg)
+void	delete_arg(char	*arg)
 {
 	char	*temp;
 	int		j;
 
 	j = 0;
-	if (!valid_args(arg))
+	if (!check_args(arg))
 	{
 		ft_putstr_fd("unset: `", 2);
 		ft_putstr_fd(arg, 2);
@@ -46,13 +58,13 @@ void	dell(char	*arg)
 	}
 	else
 	{
-		while (g_info.envp[j])
+		while (g_info.env[j])
 		{
-			if (!ft_strncmp(g_info.envp[j], arg, ft_strlen(arg)))
+			if (!ft_strncmp(g_info.env[j], arg, ft_strlen(arg)))
 			{
-				temp = g_info.envp[j];
-				g_info.envp[j] = NULL;
-				up_mass(j);
+				temp = g_info.env[j];
+				g_info.env[j] = NULL;
+				move_up_args(j);
 				free(temp);
 			}
 			j++;
@@ -67,7 +79,7 @@ void	ft_unset(char **args)
 	i = 0;
 	while (args[i])
 	{
-		dell(args[i]);
+		delete_arg(args[i]);
 		i++;
 	}
 	g_info.status = 0;

@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_cd.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cnearing <cnearing@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/30 22:09:36 by cnearing          #+#    #+#             */
+/*   Updated: 2022/10/30 22:28:51 by cnearing         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-int	change(char *pach)
+int	change(char *path)
 {
 	char	*pwd;
 
 	pwd = getcwd(NULL, 0);
-	if (!chdir(pach))
+	if (!chdir(path))
 	{
 		if (pwd)
 		{
@@ -23,16 +35,16 @@ int	change(char *pach)
 	return (0);
 }
 
-void	change_directory(char *pach)
+void	change_directory(char *path)
 {
 	struct stat	st;
 
-	if (change(pach))
+	if (change(path))
 		return ;
 	ft_putstr_fd("minishell: cd: ", 2);
-	ft_putstr_fd(pach, 2);
+	ft_putstr_fd(path, 2);
 	g_info.status = 1;
-	if (stat(pach, &st) == -1)
+	if (stat(path, &st) == -1)
 		ft_putstr_fd(": No such file or directory", 2);
 	else if (!(st.st_mode & S_IXUSR))
 		ft_putstr_fd(": Permission denied", 2);
@@ -42,24 +54,24 @@ void	change_directory(char *pach)
 	g_info.status = 0;
 }
 
-void	directory_home(char *pach, char *pach_2)
+void	directory_home(char *home_path, char *new_path)
 {
-	if (pach)
+	if (home_path)
 	{
-		change_directory(ft_strchr(pach, '=') + 1);
-		if (!ft_strncmp(pach_2, "~/", 2))
-			change_directory(pach_2 + 2);
+		change_directory(ft_strchr(home_path, '=') + 1);
+		if (!ft_strncmp(new_path, "~/", 2))
+			change_directory(new_path + 2);
 	}
 	else
 		ft_putstr_fd("cd:, HOME not set\n", 2);
 	g_info.status = 0;
 }
 
-void	directory_olppwd(char *pach)
+void	directory_oldpwd(char *path)
 {
-	if (pach)
+	if (path)
 	{
-		change_directory(ft_strchr(pach, '=') + 1);
+		change_directory(ft_strchr(path, '=') + 1);
 		ft_putstr_fd(ft_strchr(get_env("PWD"), '=') + 1, 1);
 	}
 	else
@@ -68,7 +80,7 @@ void	directory_olppwd(char *pach)
 
 void	ft_cd(char **args)
 {
-	char	*pach;
+	char	*path;
 
 	if (args[0] && args[1])
 	{
@@ -77,15 +89,18 @@ void	ft_cd(char **args)
 		return ;
 	}
 	if (!ft_strncmp(args[0], "-", 2))
-		directory_olppwd(get_env("OLDPWD"));
+	{	
+		directory_oldpwd(get_env("OLDPWD"));
+		ft_putstr_fd("\n", 1);
+	}
 	else if (!ft_strncmp(args[0], "~", 1) || !ft_strncmp(args[0], "--", 3))
 		directory_home(get_env("HOME"), args[0]);
 	else
 	{
-		pach = get_env("HOME");
-		if (!pach || ft_strncmp(pach, "~/", 2))
+		path = get_env("HOME");
+		if (!path || ft_strncmp(path, "~/", 2))
 			change_directory(args[0]);
 		else
-			change_directory(ft_strjoin(ft_strchr(pach, '=') + 1, args[0] + 1));
+			change_directory(ft_strjoin(ft_strchr(path, '=') + 1, args[0] + 1));
 	}
 }

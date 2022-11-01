@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dozella <dozella@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/31 13:51:25 by dozella           #+#    #+#             */
+/*   Updated: 2022/10/31 14:00:47 by dozella          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 int	count_pipes(t_list	*token)
@@ -40,16 +52,18 @@ int	count_cmds(t_list *token, int p_i)
 char	*pull_dollar(char *value)
 {
 	t_list	*tmp;
+	int		i;
 
-	tmp = g_info.envp_list;
+	tmp = g_info.env_list;
 	if (value[0] == '?')
 		return (ft_itoa(g_info.status));
 	else
 	{
+		i = 0;
 		while (tmp)
 		{
-			if (!ft_strcmp(value, ((t_envp *)tmp->value)->key))
-				return (ft_strdup(((t_envp *)tmp->value)->value));
+			if (!ft_strcmp(value, ((t_env *)tmp->value)->key))
+				return (ft_strdup(((t_env *)tmp->value)->value));
 			tmp = tmp->next;
 		}
 	}

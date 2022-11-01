@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fill_argv.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cnearing <cnearing@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/31 13:51:22 by dozella           #+#    #+#             */
+/*   Updated: 2022/10/31 19:17:43 by cnearing         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 void	help_fill_argv(t_help *help, t_list *token, int *i)
@@ -44,6 +56,8 @@ void	fill_argv(t_help *help, t_list *tmp, int p_i)
 
 void	free_parser(t_info *info)
 {
+	int	i;
+
 	while (info->token)
 	{
 		free(((t_token *)info->token->value)->value);
@@ -53,6 +67,9 @@ void	free_parser(t_info *info)
 	info->token = NULL;
 	while (info->help)
 	{
+		i = 0;
+		while (((t_help *)info->help->value)->argv[i])
+			free(((t_help *)info->help->value)->argv[i++]);
 		free(((t_help *)info->help->value)->argv);
 		free(((t_help *)info->help->value)->cmd);
 		free(((t_help *)info->help->value)->heredok);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_itoa.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dozella <dozella@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/31 13:50:01 by dozella           #+#    #+#             */
+/*   Updated: 2022/10/31 13:50:34 by dozella          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 static void	make_str(char str[50], unsigned int nb, int sign)
@@ -42,7 +54,7 @@ static void	ft_strrev(char str[50])
 	}
 }
 
-static char	*ft_enother_strdup(char s[50])
+static char	*ft_another_strdup(char s[50])
 {
 	char	*str;
 	int		i;
@@ -77,6 +89,6 @@ char	*ft_itoa(int n)
 		nb = n;
 	make_str(str, nb, sign);
 	ft_strrev(str);
-	result = ft_enother_strdup(str);
+	result = ft_another_strdup(str);
 	return (result);
 }

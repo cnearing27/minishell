@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cnearing <cnearing@student.21-school.ru    +#+  +:+       +#+        */
+/*   By: dozella <dozella@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/09 14:49:18 by cdoria            #+#    #+#             */
-/*   Updated: 2022/10/20 22:56:00 by cnearing         ###   ########.fr       */
+/*   Created: 2022/10/31 14:06:22 by dozella           #+#    #+#             */
+/*   Updated: 2022/10/31 14:06:25 by dozella          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ int	index_equals(char *str)
 	return (-1);
 }
 
-void	alph_sorting(char **str, int n)
+void	sort_abc(char **str, int n)
 {
-	char	*temp;
+	char	*tmp;
 	int		i;
 	int		j;
 
@@ -40,9 +40,9 @@ void	alph_sorting(char **str, int n)
 		{
 			if (ft_strncmp(str[i], str[j], ft_strlen(str[i])) > 0)
 			{
-				temp = str[i];
+				tmp = str[i];
 				str[i] = str[j];
-				str[j] = temp;
+				str[j] = tmp;
 			}
 			j++;
 		}
@@ -68,31 +68,32 @@ char	*get_name(char *str)
 		name[i] = str[i];
 		i++;
 	}
+	name[i] = '\0';
 	return (name);
 }
 
 char	*get_env(char *name)
 {
-	int	len;
+	int	length;
 	int	i;
 
 	i = 0;
-	len = ft_strlen(name);
-	while (g_info.envp[i])
+	length = ft_strlen(name);
+	while (g_info.env[i])
 	{
-		if (!ft_strncmp(g_info.envp[i], name, len) \
-			&& g_info.envp[i][len] == '=')
-			return (g_info.envp[i]);
+		if (!ft_strncmp(g_info.env[i], name, length) \
+			&& g_info.env[i][length] == '=')
+			return (g_info.env[i]);
 		i++;
 	}
 	return (NULL);
 }
 
-void	set_env(char *name, char *pach)
+void	set_env(char *name, char *path)
 {
 	char	*env;
 
-	env = ft_strjoin(name, pach);
+	env = ft_strjoin(name, path);
 	add_export(env);
 	free(env);
 }

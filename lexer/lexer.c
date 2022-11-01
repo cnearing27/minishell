@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dozella <dozella@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/30 22:51:46 by cnearing          #+#    #+#             */
+/*   Updated: 2022/10/31 13:59:11 by dozella          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 int	check_spaces(int *i, t_info *info, char *line)
@@ -34,7 +46,7 @@ int	check_words(int *i, t_info *info, char *line)
 	return (1);
 }
 
-int	check_double_quotation(int *i, t_info *info, char *line)
+int	check_double_quotes(int *i, t_info *info, char *line)
 {
 	int	j;
 
@@ -56,7 +68,7 @@ int	check_double_quotation(int *i, t_info *info, char *line)
 	return (1);
 }
 
-int	check_quotation(int	*i, t_info *info, char *line)
+int	check_quotes(int	*i, t_info *info, char *line)
 {
 	int	j;
 
@@ -78,7 +90,7 @@ int	check_quotation(int	*i, t_info *info, char *line)
 	return (1);
 }
 
-void	lexer(t_info *info, char *line)
+int	lexer(t_info *info, char *line)
 {
 	int	i;
 
@@ -87,17 +99,19 @@ void	lexer(t_info *info, char *line)
 	{
 		if (line[i] == '\\' || line[i] == ';')
 		{
-			printf("ERROR\n");
-			return ;
+			printf("ERROR: \\, ; is not supported\n");
+			free_parser(info);
+			return (-1);
 		}
 		check_spaces(&i, info, line);
 		check_pipe(&i, info, line);
-		check_quotation(&i, info, line);
+		check_quotes(&i, info, line);
 		check_heredoc(&i, info, line);
 		check_words(&i, info, line);
-		check_double_quotation(&i, info, line);
+		check_double_quotes(&i, info, line);
 		check_dollar(&i, info, line);
 		check_redirect(&i, info, line);
 	}
 	parser(info);
+	return (0);
 }

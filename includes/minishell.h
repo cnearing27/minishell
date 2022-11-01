@@ -1,9 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cnearing <cnearing@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/30 22:50:36 by cnearing          #+#    #+#             */
+/*   Updated: 2022/10/31 19:21:10 by cnearing         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
 # include "includes.h"
 
 void	init(char **enpv, t_info *info);
+void	env_list(t_info *info);
+void	free_strs(char **strs);
 
 //lib funcs
 size_t	ft_strlcpy(char *dst, const char *src, size_t size);
@@ -28,15 +42,16 @@ void	*ft_realloc(void *old, size_t old_size, size_t new_size);
 void	*ft_memset(void *b, int c, size_t len);
 void	ft_bzero(void *s, size_t n);
 int		ft_atoi(const char *str);
+void	ft_lstclear(t_list **lst);
 
 //lexer
-void	lexer(t_info *info, char *line);
+int		lexer(t_info *info, char *line);
 int		check_pipe(int *i, t_info *info, char *line);
 int		check_dollar(int *i, t_info *info, char *line);
 int		check_redirect(int *i, t_info *info, char *line);
 int		check_heredoc(int *i, t_info *info, char *line);
 t_list	*ft_create_token(char *value, int key);
-t_list	*ft_create_envp(char *str1, char *str2);
+t_list	*ft_create_env(char *str1, char *str2);
 t_list	*ft_create_help(t_list *token, int p_i);
 
 //parser
@@ -54,11 +69,11 @@ void	free_parser(t_info *info);
 
 //executor
 int		executor(t_info *data);
-void	chech_comand(t_comand *c);
-char	**get_paths(char **envp);
-int		count_comand(t_comand *comand);
+void	check_command(t_comand *c);
+char	**get_paths(char **env);
+int		count_commands(t_comand *comand);
 void	free_comand(t_comand *comand);
-int		more_cmd(int number_cmd);
+int		few_cmds(int number_cmd);
 void	cmds_fds(t_comand *cmds, int size);
 void	status_child(int pid);
 void	env_in_export(char *str);
@@ -77,7 +92,7 @@ char	**add_cmd(t_comand *data);
 
 //built utils
 char	*get_name(char *str);
-void	alph_sorting(char **str, int n);
+void	sort_abc(char **str, int n);
 int		index_equals(char *str);
 // void	add_export(char *new);
 void	set_env(char *name, char *pach);

@@ -1,22 +1,34 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_builtin.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cnearing <cnearing@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/30 22:06:57 by cnearing          #+#    #+#             */
+/*   Updated: 2022/10/31 16:11:28 by cnearing         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-static int	get_comand(t_comand *comand)
+static int	get_command(t_comand *comand)
 {
 	int			i;
-	const char	*comands[] = {"echo", "env", "pwd", "cd", "exit", "export",
+	const char	*cmds[] = {"echo", "env", "pwd", "cd", "exit", "export",
 		"unset", NULL};
 
 	i = 0;
-	while (comands[i])
+	while (cmds[i])
 	{
-		if (!ft_strncmp(comands[i], comand->cmd, ft_strlen(comands[i])))
+		if (!ft_strncmp(cmds[i], comand->cmd, ft_strlen(cmds[i])))
 			return (i);
 		i++;
 	}
 	return (-1);
 }
 
-static void	*init_commnds(void)
+static void	*init_commands(void)
 {
 	void	(**command)(char **);
 
@@ -36,8 +48,8 @@ int	ft_builtins(t_comand *comand)
 	int		i;
 	void	(**command)(char **);
 
-	command = init_commnds();
-	i = get_comand(comand);
+	command = init_commands();
+	i = get_command(comand);
 	if (i > -1)
 	{
 		command[i](comand->args);
